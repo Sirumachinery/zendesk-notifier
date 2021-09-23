@@ -34,14 +34,14 @@ ZENDESK_DSN=zendesk://support@yourcompany.com:abc123@yourcompany
 # ./config/packages/notifier.yaml
 framework:
     notifier:
-        texter_transports:
+        chatter_transports:
             zendesk: '%env(ZENDESK_DSN)%'
 ```
 
 ```yaml
 # ./config/services.yaml
 Siru\Notifier\Bridge\Zendesk\ZendeskTransportFactory:
-    tags: [ texter.transport_factory ]
+    tags: [ chatter.transport_factory ]
 ```
 
 ## Usage

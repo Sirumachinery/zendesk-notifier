@@ -114,6 +114,18 @@ final class ZendeskOptions implements MessageOptionsInterface
         return $this;
     }
 
+    public function requester(string $emailAddress, ?string $name = null): self
+    {
+        if (null === $name) {
+            $name = explode('@', $emailAddress, 2)[0];
+        }
+        $this->options['requester'] = [
+            'name' => $name,
+            'email' => $emailAddress
+        ];
+        return $this;
+    }
+
     public function isRequest() : bool
     {
         return $this->asRequest;

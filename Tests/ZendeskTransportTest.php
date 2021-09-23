@@ -103,7 +103,9 @@ final class ZendeskTransportTest extends TransportTestCase
         $chatMessage = new ChatMessage('My message');
 
         $expectedBody = json_encode([
-            'subject' => 'My message'
+            'ticket' => [
+                'subject' => 'My message'
+            ]
         ]);
 
         $client = new MockHttpClient(function (string $method, string $url, array $options = []) use ($response, $expectedBody): ResponseInterface {
@@ -137,8 +139,10 @@ final class ZendeskTransportTest extends TransportTestCase
         $chatMessage = ChatMessage::fromNotification($notification);
 
         $expectedBody = json_encode([
-            'subject' => 'My message',
-            'priority' => 'high'
+            'ticket' => [
+                'subject' => 'My message',
+                'priority' => 'high'
+            ]
         ]);
 
         $client = new MockHttpClient(function (string $method, string $url, array $options = []) use ($response, $expectedBody): ResponseInterface {
@@ -177,11 +181,13 @@ final class ZendeskTransportTest extends TransportTestCase
         $chatMessage->options($options);
 
         $expectedBody = json_encode([
-            'subject' => 'My message',
-            'comment' => [
-                'body' => 'My description'
-            ],
-            'priority' => 'low'
+            'ticket' => [
+                'subject' => 'My message',
+                'comment' => [
+                    'body' => 'My description'
+                ],
+                'priority' => 'low'
+            ]
         ]);
 
         $client = new MockHttpClient(function (string $method, string $url, array $options = []) use ($response, $expectedBody): ResponseInterface {
@@ -214,13 +220,20 @@ final class ZendeskTransportTest extends TransportTestCase
         $options = (new ZendeskOptions())
             ->subject('My message')
             ->asRequest()
-            ->emailAddress('bar@local.host');
+            ->emailAddress('bar@local.host')
+            ->requester('foo@local.host');
 
         $chatMessage = new ChatMessage('');
         $chatMessage->options($options);
 
         $expectedBody = json_encode([
-            'subject' => 'My message'
+            'request' => [
+                'subject' => 'My message',
+                'requester' => [
+                    'name' => 'foo',
+                    'email' => 'foo@local.host'
+                ]
+            ],
         ]);
 
         $client = new MockHttpClient(function (string $method, string $url, array $options = []) use ($response, $expectedBody): ResponseInterface {

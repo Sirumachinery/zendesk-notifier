@@ -15,7 +15,8 @@ class ZendeskOptionsTest extends TestCase
             ->subject('foo')
             ->text('bar')
             ->priority('urgent')
-            ->tag('xooxer');
+            ->tag('xooxer')
+            ->requester('foo@local.host', 'John Doe');
 
         $expected = [
             'subject' => 'foo',
@@ -23,7 +24,11 @@ class ZendeskOptionsTest extends TestCase
                 'body' => 'bar'
             ],
             'priority' => 'urgent',
-            'tags' => ['xooxer']
+            'tags' => ['xooxer'],
+            'requester' => [
+                'name' => 'John Doe',
+                'email' => 'foo@local.host'
+            ]
         ];
 
         $this->assertEquals($expected, $options->toArray());
