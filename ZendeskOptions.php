@@ -10,12 +10,20 @@ use Symfony\Component\Notifier\Notification\Notification;
 final class ZendeskOptions implements MessageOptionsInterface
 {
 
-    private $options;
+    /**
+     * @var array
+     */
+    private $options = [];
 
-    public function __construct(array $options = [])
-    {
-        $this->options = $options;
-    }
+    /**
+     * @var bool
+     */
+    private $asRequest = false;
+
+    /**
+     * @var string|null
+     */
+    private $emailAddress = null;
 
     public static function fromNotification(Notification $notification): self
     {
@@ -90,6 +98,30 @@ final class ZendeskOptions implements MessageOptionsInterface
         $this->options['tags'][] = $tag;
 
         return $this;
+    }
+
+    public function asRequest(bool $asRequest = true): self
+    {
+        $this->asRequest = $asRequest;
+
+        return $this;
+    }
+
+    public function emailAddress(string $emailAddress): self
+    {
+        $this->emailAddress = $emailAddress;
+
+        return $this;
+    }
+
+    public function isRequest() : bool
+    {
+        return $this->asRequest;
+    }
+
+    public function getEmailAddress() : ?string
+    {
+        return $this->emailAddress;
     }
 
     public function getRecipientId(): ?string

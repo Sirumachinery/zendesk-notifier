@@ -88,7 +88,7 @@ final class ZendeskTransportTest extends TransportTestCase
         $transport->send(new ChatMessage('My message'));
     }
 
-    public function testSendWithChatMessage() : void
+    public function testCreatesTicketWithChatMessage() : void
     {
         $response = $this->createMock(ResponseInterface::class);
 
@@ -107,6 +107,8 @@ final class ZendeskTransportTest extends TransportTestCase
         ]);
 
         $client = new MockHttpClient(function (string $method, string $url, array $options = []) use ($response, $expectedBody): ResponseInterface {
+            $this->assertSame('POST', $method);
+            $this->assertStringEndsWith('/api/v2/tickets.json', $url);
             $this->assertSame($expectedBody, $options['body']);
 
             return $response;
@@ -119,7 +121,7 @@ final class ZendeskTransportTest extends TransportTestCase
         $this->assertSame('33', $sentMessage->getMessageId());
     }
 
-    public function testSendWithNotification() : void
+    public function testCreatesTicketWithNotification() : void
     {
         $response = $this->createMock(ResponseInterface::class);
 
@@ -140,6 +142,8 @@ final class ZendeskTransportTest extends TransportTestCase
         ]);
 
         $client = new MockHttpClient(function (string $method, string $url, array $options = []) use ($response, $expectedBody): ResponseInterface {
+            $this->assertSame('POST', $method);
+            $this->assertStringEndsWith('/api/v2/tickets.json', $url);
             $this->assertSame($expectedBody, $options['body']);
 
             return $response;
@@ -152,7 +156,7 @@ final class ZendeskTransportTest extends TransportTestCase
         $this->assertSame('33', $sentMessage->getMessageId());
     }
 
-    public function testSendWithOptions() : void
+    public function testCreatesTicketWithOptions() : void
     {
         $response = $this->createMock(ResponseInterface::class);
 
@@ -181,6 +185,47 @@ final class ZendeskTransportTest extends TransportTestCase
         ]);
 
         $client = new MockHttpClient(function (string $method, string $url, array $options = []) use ($response, $expectedBody): ResponseInterface {
+            $this->assertSame('POST', $method);
+            $this->assertStringEndsWith('/api/v2/tickets.json', $url);
+            $this->assertSame($expectedBody, $options['body']);
+
+            return $response;
+        });
+
+        $transport = $this->createTransport($client);
+
+        $sentMessage = $transport->send($chatMessage);
+
+        $this->assertSame('33', $sentMessage->getMessageId());
+    }
+
+    public function testCreatesRequestForUserWithOptions() : void
+    {
+        $response = $this->createMock(ResponseInterface::class);
+
+        $response->expects($this->exactly(2))
+            ->method('getStatusCode')
+            ->willReturn(201);
+
+        $response->expects($this->once())
+            ->method('getContent')
+            ->willReturn('{"request":{"description":"","id":33,"status":"new","subject":"My message"}}');
+
+        $options = (new ZendeskOptions())
+            ->subject('My message')
+            ->asRequest()
+            ->emailAddress('bar@local.host');
+
+        $chatMessage = new ChatMessage('');
+        $chatMessage->options($options);
+
+        $expectedBody = json_encode([
+            'subject' => 'My message'
+        ]);
+
+        $client = new MockHttpClient(function (string $method, string $url, array $options = []) use ($response, $expectedBody): ResponseInterface {
+            $this->assertSame('POST', $method);
+            $this->assertStringEndsWith('/api/v2/requests.json', $url);
             $this->assertSame($expectedBody, $options['body']);
 
             return $response;

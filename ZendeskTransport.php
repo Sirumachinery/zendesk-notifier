@@ -50,12 +50,18 @@ class ZendeskTransport extends AbstractTransport
             }
         }
 
-        $url = sprintf('https://%s/%s', $this->getEndpoint(), '/api/v2/requests.json');
+        if (true === $opts->isRequest()) {
+            $endPoint = '/api/v2/requests.json';
+        } else {
+            $endPoint = '/api/v2/tickets.json';
+        }
+        $url = sprintf('https://%s/%s', $this->getEndpoint(), $endPoint);
+        $username = $opts->getEmailAddress() ?: $this->username;
 
-        $options = $opts->toArray();
+        $fields = $opts->toArray();
         $response = $this->client->request('POST', $url, [
-            'auth_basic' => [$this->username . '/token', $this->token],
-            'json' => array_filter($options),
+            'auth_basic' => [$username . '/token', $this->token],
+            'json' => array_filter($fields),
         ]);
 
         try {

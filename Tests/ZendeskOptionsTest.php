@@ -29,4 +29,16 @@ class ZendeskOptionsTest extends TestCase
         $this->assertEquals($expected, $options->toArray());
     }
 
+    public function testSetters() : void
+    {
+        $options = new ZendeskOptions();
+        $this->assertNull($options->getEmailAddress());
+        $this->assertFalse($options->isRequest());
+
+        $options->emailAddress('foo@local.host');
+        $options->asRequest(true);
+        $this->assertEquals('foo@local.host', $options->getEmailAddress());
+        $this->assertTrue($options->isRequest());
+    }
+
 }
