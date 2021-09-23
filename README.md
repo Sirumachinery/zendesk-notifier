@@ -53,7 +53,9 @@ set the correct options using ZendOptions class.
 $options = (new ZendeskOptions())
     ->subject('My message')
     ->asRequest()
-    ->emailAddress('some-user@domain');
+    ->requester('some-user@domain');
 $chatMessage = new ChatMessage('');
 $chatMessage->options($options);
 ```
+
+See [ZendeskOptions](ZendeskOptions.php) for all available options.

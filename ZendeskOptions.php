@@ -72,6 +72,9 @@ final class ZendeskOptions implements MessageOptionsInterface
         return $this->options;
     }
 
+    /**
+     * Set ticket subject line.
+     */
     public function subject(string $text): self
     {
         $this->options['subject'] = $text;
@@ -79,6 +82,9 @@ final class ZendeskOptions implements MessageOptionsInterface
         return $this;
     }
 
+    /**
+     * Set longer ticket description.
+     */
     public function text(string $text): self
     {
         $this->options['comment']['body'] = $text;
@@ -86,6 +92,10 @@ final class ZendeskOptions implements MessageOptionsInterface
         return $this;
     }
 
+    /**
+     * Set ticket priority.
+     * Valid values are 'low', 'normal', 'high' and 'urgent'.
+     */
     public function priority(string $priority): self
     {
         $this->options['priority'] = $priority;
@@ -93,6 +103,9 @@ final class ZendeskOptions implements MessageOptionsInterface
         return $this;
     }
 
+    /**
+     * Add tag to ticket.
+     */
     public function tag(string $tag): self
     {
         $this->options['tags'][] = $tag;
@@ -100,6 +113,10 @@ final class ZendeskOptions implements MessageOptionsInterface
         return $this;
     }
 
+    /**
+     * By default, transport creates a ticket. This method changes this to request.
+     * To learn more about ticket vs requests, see Zendesk documentation.
+     */
     public function asRequest(bool $asRequest = true): self
     {
         $this->asRequest = $asRequest;
@@ -107,6 +124,10 @@ final class ZendeskOptions implements MessageOptionsInterface
         return $this;
     }
 
+    /**
+     * Changes the username for authentication.
+     * Use this to create tickets/requests on behalf of existing Zendesk user.
+     */
     public function emailAddress(string $emailAddress): self
     {
         $this->emailAddress = $emailAddress;
@@ -114,6 +135,9 @@ final class ZendeskOptions implements MessageOptionsInterface
         return $this;
     }
 
+    /**
+     * Set requester information for anonymous requests.
+     */
     public function requester(string $emailAddress, ?string $name = null): self
     {
         if (null === $name) {
