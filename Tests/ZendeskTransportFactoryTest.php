@@ -7,7 +7,7 @@ use Siru\Notifier\Bridge\Zendesk\ZendeskTransportFactory;
 use Symfony\Component\Notifier\Test\TransportFactoryTestCase;
 use Symfony\Component\Notifier\Transport\TransportFactoryInterface;
 
-final class GoogleChatTransportFactoryTest extends TransportFactoryTestCase
+final class ZendeskTransportFactoryTest extends TransportFactoryTestCase
 {
     /**
      * @return ZendeskTransportFactory
