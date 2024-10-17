@@ -21,25 +21,24 @@ final class ZendeskTransportTest extends TransportTestCase
     /**
      * @return ZendeskTransport
      */
-    public function createTransport(HttpClientInterface $client = null, string $threadKey = null): TransportInterface
+    public static function createTransport(HttpClientInterface $client = null, string $threadKey = null): TransportInterface
     {
-        return new ZendeskTransport('subdomain', 'foo@local.host', 'abc123', $client ?? $this->createMock(HttpClientInterface::class));
+        return new ZendeskTransport('subdomain', 'foo@local.host', 'abc123', $client);
     }
 
-    public function toStringProvider(): iterable
+    public static function toStringProvider(): iterable
     {
-        yield ['zendesk://foo@local.host:abc123@subdomain.zendesk.com', $this->createTransport()];
+        yield ['zendesk://foo@local.host:abc123@subdomain.zendesk.com', static::createTransport()];
     }
 
-    public function supportedMessagesProvider(): iterable
+    public static function supportedMessagesProvider(): iterable
     {
         yield [new ChatMessage('My message')];
     }
 
-    public function unsupportedMessagesProvider(): iterable
+    public static function unsupportedMessagesProvider(): iterable
     {
         yield [new SmsMessage('1234567', 'My message')];
-        yield [$this->createMock(MessageInterface::class)];
     }
 
     public function testInvalidResponseThrowsTransportException() : void
