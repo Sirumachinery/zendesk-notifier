@@ -17,7 +17,7 @@ final class ZendeskTransportFactoryTest extends TransportFactoryTestCase
         return new ZendeskTransportFactory();
     }
 
-    public function createProvider(): iterable
+    public static function createProvider(): iterable
     {
         yield [
             'zendesk://johndoe:abcde@foo.zendesk.com',
@@ -29,18 +29,18 @@ final class ZendeskTransportFactoryTest extends TransportFactoryTestCase
         ];
     }
 
-    public function supportsProvider(): iterable
+    public static function supportsProvider(): iterable
     {
         yield [true, 'zendesk://host/path'];
         yield [false, 'foobar://host/path'];
     }
 
-    public function incompleteDsnProvider(): iterable
+    public static function incompleteDsnProvider(): iterable
     {
         yield 'missing token' => ['zendesk://username@foo'];
     }
 
-    public function unsupportedSchemeProvider(): iterable
+    public static function unsupportedSchemeProvider(): iterable
     {
         yield ['foobar://host/path'];
     }
