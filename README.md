@@ -4,7 +4,7 @@ Provides Zendesk integration for Symfony Notifier.
 
 ## Requirements
 
-- PHP 7.3
+- PHP 7.3+/8.1+
 - Symfony Notifier 5.3+ and HttpClient components
 - Zendesk subdomain, username and API token
 
